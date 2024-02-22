@@ -3,3 +3,5 @@ wandb/
 models/
 MaskedSST.egg-info/
 *.ipynb_checkpoints
+2018IEEE_Contest/
+slurm-*
