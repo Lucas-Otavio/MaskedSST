@@ -52,7 +52,7 @@ if __name__ == "__main__":
         device,
     )
 
-    run = wandb.init(config=config, project="downstream")
+    run = wandb.init(config=config, project="MarkedSST", entity="lucasotavio")
     config.run_id = run.id
 
     if config.method_name == "li":
