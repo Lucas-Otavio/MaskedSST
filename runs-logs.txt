@@ -1,0 +1,14 @@
+Important runs:
+
+MaskedSST (finetune.py):
+6 - longest one that ran on cluster's CPU
+8 - ran at cluster's GPU, but forgot to save
+10 - ran at cluster's GPU and saved, 100 epochs
+11 - 1000 epochs
+
+Other one (pretrain.py):
+1 - 800 epochs, not saved
+
+MaskedSST (pretrain.py):
+1 - 200 epochs
+2 - 200 epochs, spectral_pos_embed=True
