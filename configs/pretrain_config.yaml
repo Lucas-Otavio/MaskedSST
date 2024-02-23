@@ -1,4 +1,4 @@
-dataset: enmap
+dataset: houston2018
 image_size: 8
 patch_size: 1
 band_patch_size: 10

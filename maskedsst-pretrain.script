@@ -1,0 +1,11 @@
+#!/bin/bash
+#SBATCH --nodes=1
+#SBATCH --gpus=1
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
+#SBATCH --time=5-00:00:00
+#SBATCH --partition=P100
+
+eval “$(conda shell.bash hook)”
+
+python pretrain.py houston2018
