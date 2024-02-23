@@ -77,6 +77,8 @@ print(f"Model parameters: {sum([p.numel() for p in model.parameters()]):,}")
 
 print(f"checkpoint path: {config.checkpoint_path}")
 
+standardizer = StandardizeHouston2018()
+
 #---------------- # Added part # --------------- #
 
 houston = Houston2018Dataset(
