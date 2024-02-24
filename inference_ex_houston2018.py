@@ -105,17 +105,28 @@ label_map = houston.label[:524,:524]
 eff_size = config.image_size - config.patch_sub
 predicted_map = torch.zeros(label_map.shape)
 
-for x in tqdm(range(0, 524)):
-    for y in range(0, 524):
-        img = scene[:,x:x + eff_size, y:y + eff_size].unsqueeze(0) #.narrow(2, x, eff_size).narrow(3, y, eff_size)
-        if x + eff_size >= 524 or y + eff_size >= 524:
-            continue
-                
-        output = model(img)
+#for x in tqdm(range(0, 524)):
+#    for y in range(0, 524):
+#        img = scene[:,x:x + eff_size, y:y + eff_size].unsqueeze(0) #.narrow(2, x, eff_size).narrow(3, y, eff_size)
+#        if x + eff_size >= 524 or y + eff_size >= 524:
+#            continue
+#                
+#        output = model(img)
+#
+#        pred = output.argmax(dim=1)
+#
+#        #pred[eff_size//2, eff_size//2]
+#        predicted_map[x + eff_size//2, y + eff_size//2] = pred[0, eff_size//2, eff_size//2]
 
-        pred = output.argmax(dim=1)
+size_x, size_y = 524-eff_size+1, 524-eff_size+1
+images_cropped = torch.zeros((size_x, 50, 8, 8))
+for x in tqdm(range(0, size_x)):
+    for y in range(0, size_y):
+        img = scene[:,x:x + eff_size, y:y + eff_size]
+        images_cropped[y] = img
 
-        #pred[eff_size//2, eff_size//2]
-        predicted_map[x + eff_size//2, y + eff_size//2] = pred[0, eff_size//2, eff_size//2]
+    output = model(images_cropped)
+    pred = output.argmax(dim=1)
+    predicted_map[x + eff_size//2 : x + eff_size//2 + size_x, y + eff_size//2] = pred[:, eff_size//2, eff_size//2]
 
 torch.save(predicted_map, "predicted_map.pt")
