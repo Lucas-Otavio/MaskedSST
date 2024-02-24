@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     # set-up training run
     run = wandb.init(
-        project="enmap-mim-spatial-spectral", config=config, save_code=True
+        project="MaskedSST-pretrain", config=config, save_code=True
     )
     config.run_id = run.id
     wandb.config.update(config)
@@ -195,3 +195,10 @@ if __name__ == "__main__":
                 scheduler.step(torch.tensor(val_losses).mean().item())
         if config.scheduler == "cosine":
             scheduler.step()
+
+    torch.save({
+            'epoch': epoch,
+            'model_state_dict': model.state_dict(),
+            'optimizer_state_dict': optimizer.state_dict(),
+            'loss': losses[-1],
+            }, f"checkpoints/pretrained_{config.encoder_name}_{config.epoch}ep_{config.dataset}_{config.run_id}.pth")

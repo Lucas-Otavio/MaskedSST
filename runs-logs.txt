@@ -10,5 +10,13 @@ Other one (pretrain.py):
 1 - 800 epochs, not saved
 
 MaskedSST (pretrain.py):
-1 - 200 epochs
-2 - 200 epochs, spectral_pos_embed=True
+1 - 200 epochs (failed)
+2 - 200 epochs, spectral_pos_embed=True (failed)
+3 - 200 epochs (n5z344yv)
+4 - 200 epochs, spectral_pos_embed=True (0h7svimo)
+
+
+Generating Image Experiment:
+101273 - create test image 1
+101274 - create test image 2
+101275 - create test image 3

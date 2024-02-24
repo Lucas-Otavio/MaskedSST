@@ -100,33 +100,38 @@ houston = Houston2018Dataset(
             rgb_only=config.rgb_only,
         )
 
-scene = houston.img[:,:524,:524]
-label_map = houston.label[:524,:524]
-eff_size = config.image_size - config.patch_sub
-predicted_map = torch.zeros(label_map.shape)
+img_test1 = houston.img[:, :, :596]
+img_test2 = houston.img[:, :601, 596:2980]
+img_test3 = houston.img[:, :, 2980:]
 
-#for x in tqdm(range(0, 524)):
-#    for y in range(0, 524):
-#        img = scene[:,x:x + eff_size, y:y + eff_size].unsqueeze(0) #.narrow(2, x, eff_size).narrow(3, y, eff_size)
-#        if x + eff_size >= 524 or y + eff_size >= 524:
-#            continue
-#                
-#        output = model(img)
-#
-#        pred = output.argmax(dim=1)
-#
-#        #pred[eff_size//2, eff_size//2]
-#        predicted_map[x + eff_size//2, y + eff_size//2] = pred[0, eff_size//2, eff_size//2]
+label_test1 = houston.label[:, :596]
+label_test2 = houston.label[:601, 596:2980]
+label_test3 = houston.label[:, 2980:]
 
-size_x, size_y = 524-eff_size+1, 524-eff_size+1
-images_cropped = torch.zeros((size_x, 50, 8, 8))
-for x in tqdm(range(0, size_x)):
-    for y in range(0, size_y):
-        img = scene[:,x:x + eff_size, y:y + eff_size]
-        images_cropped[y] = img
 
-    output = model(images_cropped)
-    pred = output.argmax(dim=1)
-    predicted_map[x + eff_size//2 : x + eff_size//2 + size_x, y + eff_size//2] = pred[:, eff_size//2, eff_size//2]
+def generate_img(img, label, save_code):
+    scene = img
+    label_map = label
+    eff_size = config.image_size - config.patch_sub
+    predicted_map = torch.zeros(label_map.shape)
+    print(f"Generating image: {save_code}")
 
-torch.save(predicted_map, "predicted_map.pt")
+    size_x, size_y = img.shape[1]-eff_size+1, img.shape[2]-eff_size+1
+    images_cropped = torch.zeros((size_y, 50, 8, 8))
+    for x in tqdm(range(0, size_x)):
+        for y in range(0, size_y):
+            img = scene[:,x:x + eff_size, y:y + eff_size]
+            images_cropped[y] = img
+
+        output = model(images_cropped)
+        pred = output.argmax(dim=1)
+        #print(predicted_map[x + eff_size//2, eff_size//2 : eff_size//2 + size_y].shape, pred[:, eff_size//2, eff_size//2].shape)
+        predicted_map[x + eff_size//2, eff_size//2 : eff_size//2 + size_y] = pred[:, eff_size//2, eff_size//2]
+
+    torch.save(predicted_map, f"predicted_map_{save_code}.pt")
+
+#generate_img(houston.img[:,:65,:65], houston.label[:65,:65], "65_65")
+#generate_img(houston.img[:,:32,:64], houston.label[:32,:64], "32_64")
+#generate_img(img_test1, label_test1, "test1")
+#generate_img(img_test2, label_test2, "test2")
+#generate_img(img_test3, label_test3, "test3")
