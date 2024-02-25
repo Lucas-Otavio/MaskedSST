@@ -109,7 +109,7 @@ label_test2 = houston.label[:601, 596:2980]
 label_test3 = houston.label[:, 2980:]
 
 
-def generate_img(img, label, save_code):
+def generate_img(img, label, save_code, batch_size=64):
     scene = img
     label_map = label
     eff_size = config.image_size - config.patch_sub
@@ -117,18 +117,22 @@ def generate_img(img, label, save_code):
     print(f"Generating image: {save_code}")
 
     size_x, size_y = img.shape[1]-eff_size+1, img.shape[2]-eff_size+1
-    images_cropped = torch.zeros((size_y, 50, 8, 8))
+    #images_cropped = torch.zeros((size_y, 50, 8, 8))
     for x in tqdm(range(0, size_x)):
-        for y in range(0, size_y):
-            img = scene[:,x:x + eff_size, y:y + eff_size]
-            images_cropped[y] = img
+        for batch_begin in range(0, size_y, batch_size):
+            size_batch = min(batch_size, size_y-batch_begin)
+            images_cropped = torch.zeros((size_batch, 50, 8, 8))
+            for y in range(batch_begin, batch_begin+size_batch):
+                img = scene[:,x:x + eff_size, y:y + eff_size]
+                images_cropped[y-batch_begin] = img
 
-        output = model(images_cropped)
-        pred = output.argmax(dim=1)
-        #print(predicted_map[x + eff_size//2, eff_size//2 : eff_size//2 + size_y].shape, pred[:, eff_size//2, eff_size//2].shape)
-        predicted_map[x + eff_size//2, eff_size//2 : eff_size//2 + size_y] = pred[:, eff_size//2, eff_size//2]
-
+            output = model(images_cropped)
+            pred = output.argmax(dim=1)
+            #print(predicted_map[x + eff_size//2, eff_size//2 : eff_size//2 + size_y].shape, pred[:, eff_size//2, eff_size//2].shape)
+            predicted_map[x + eff_size//2, batch_begin + eff_size//2 : batch_begin + eff_size//2 + size_batch] = pred[:, eff_size//2, eff_size//2]
+    
     torch.save(predicted_map, f"predicted_map_{save_code}.pt")
+            
 
 #generate_img(houston.img[:,:65,:65], houston.label[:65,:65], "65_65")
 #generate_img(houston.img[:,:32,:64], houston.label[:32,:64], "32_64")
