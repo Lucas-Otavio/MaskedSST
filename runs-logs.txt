@@ -5,6 +5,13 @@ MaskedSST (finetune.py):
 8 - ran at cluster's GPU, but forgot to save
 10 - ran at cluster's GPU and saved, 100 epochs
 11 - 1000 epochs
+14 - with my pretrained model (without spectral_pos_embed)
+16 - with spectral_pos_embed
+28 - weighted loss (2)
+29 - weighted loss (3)
+30 - weighted loss (4)
+31 - weighted loss (5)
+
 
 Other one (pretrain.py):
 1 - 800 epochs, not saved
@@ -14,9 +21,12 @@ MaskedSST (pretrain.py):
 2 - 200 epochs, spectral_pos_embed=True (failed)
 3 - 200 epochs (n5z344yv)
 4 - 200 epochs, spectral_pos_embed=True (0h7svimo)
+5 - failed (cpu)
+6 - blockwise_patch_embed=False
+7 - rgb-only
 
 
 Generating Image Experiment:
-101273 - create test image 1
-101274 - create test image 2
-101275 - create test image 3
+101496 - create test image 1
+101500 - create test image 2
+101499 - create test image 3
