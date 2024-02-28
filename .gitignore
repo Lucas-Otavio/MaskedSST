@@ -5,3 +5,5 @@ MaskedSST.egg-info/
 *.ipynb_checkpoints
 2018IEEE_Contest/
 *.out
+detectree2/
+predicted_map*
