@@ -5,13 +5,15 @@ MaskedSST (finetune.py):
 8 - ran at cluster's GPU, but forgot to save
 10 - ran at cluster's GPU and saved, 100 epochs
 11 - 1000 epochs
-14 - with my pretrained model (without spectral_pos_embed)
+14 - with my pretrained model (spectral_pos_embed=False)
 16 - with spectral_pos_embed
 19 - without blockwise_patch_embed
 28 - weighted loss (2)
 29 - weighted loss (3)
 30 - weighted loss (4)
 31 - weighted loss (5)
+37 - RBG only
+38 - without spectral_pos_embed without blockwise_patch_embed
 
 
 Other one (pretrain.py):
